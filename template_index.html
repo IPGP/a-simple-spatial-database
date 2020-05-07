@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>A simple spatial database</title>
+    
+    <link rel="stylesheet" href="external/leaflet-1.4.0/leaflet.css">
+    <script src="external/leaflet-1.4.0/leaflet.js"></script>
+    
+    <!-- <script src="external/leaflet-bing-layer/leaflet-bing-layer.min.js"></script> -->
+    
+    <script src="external/Leaflet.draw-develop/src/Leaflet.draw.js"></script>
+    <script src="external/Leaflet.draw-develop/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="external/Leaflet.draw-develop/src/leaflet.draw.css">
+    
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Poly.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Marker.js"></script>
+  	<script src="external/Leaflet.draw-develop/src/edit/handler/Edit.CircleMarker.js"></script>
+  	<script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Circle.js"></script>
+    
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Feature.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Rectangle.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Circle.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Marker.js"></script>
+    <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.CircleMarker.js"></script>
+    
+    <script src="external/Leaflet.draw-develop/src/ext/TouchEvents.js"></script>
+    <script src="external/Leaflet.draw-develop/src/ext/LatLngUtil.js"></script>
+    <script src="external/Leaflet.draw-develop/src/ext/GeometryUtil.js"></script>
+    <script src="external/Leaflet.draw-develop/src/ext/LineUtil.Intersect.js"></script>
+    <script src="external/Leaflet.draw-develop/src/ext/Polyline.Intersect.js"></script>
+    <script src="external/Leaflet.draw-develop/src/ext/Polygon.Intersect.js"></script>
+    
+    <script src="external/Leaflet.draw-develop/src/Control.Draw.js"></script>
+    <script src="external/Leaflet.draw-develop/src/Tooltip.js"></script>
+    <script src="external/Leaflet.draw-develop/src/Toolbar.js"></script>
+    
+    <script src="external/Leaflet.draw-develop/src/draw/DrawToolbar.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/EditToolbar.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/EditToolbar.Delete.js"></script>
+    
+    <script src="external/Leaflet.Grid-master/L.Grid.js"></script>
+    <link rel="stylesheet" href="external/Leaflet.Grid-master/L.Grid.css">
+    
+    <link rel="stylesheet" href="external/leaflet-gesture-handling/leaflet-gesture-handling.min.css">
+    <script src="external/leaflet-gesture-handling/leaflet-gesture-handling.min.js"></script>
+    
+    <script src="external/turf/turf.min.js"></script>
+    
+    <link rel="stylesheet" href="external/jquery-ui-1.12.1/jquery-ui.min.css">
+    <script src="external/jQuery_3.3.1/jquery-3.3.1.min.js"></script>
+    <script src="external/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- YOUR_DATA -->
+    <!-- <link rel="EXAMPLE_DATA" type="application/json" href="data/example_data.geojson"> -->
+    
+    <script>
+    // Goto top
+    function toTop() {
+        $('html, body').animate({scrollTop: 0}, 500);
+    }
+    
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 20) {
+            $('#toTop').fadeIn();
+        } else {
+            $('#toTop').fadeOut();
+        }
+    });
+    </script>
+</head>
+<body>
+<h1>A simple spatial database</h1>
+
+<div id="map"></div>
+<script>
+    // Constants
+    var NO_DATA_MESSAGE = 'To display results, activate one or more data layers and draw a selection (rectangle icon)';
+    var NO_DATA_AFTER_FILTER_MESSAGE = "No results within the defined date range"
+    
+    // Message initialization
+    $(function() {$('#no_data td').html(NO_DATA_MESSAGE);}); 
+    
+    
+    // Map functions
+    
+    function pad(str, max) {
+        // Add zeros before the string, up to the max string length
+        
+        str = str.toString();
+        return str.length < max ? pad("0" + str, max) : str;
+    }   
+    
+    function addPolygonLayer(type, container, color) {
+        // Ajax to add a Polygon data layer
+        
+        $.getJSON($('link[rel="'+type+'"]').attr("href"), function(data) {
+            container.data = L.geoJson(data, {
+                style: {
+                    'color': color
+                },
+                onEachFeature: function (feature, layer) {
+                    // Add a popup to each object
+                    
+                    if (feature.properties && feature.properties.type) {
+                        var content = feature.properties.type;
+                        if (feature.properties.date) {
+                            var date = new Date(feature.properties.date);
+                            var day = pad(date.getDate(), 2);
+                            var month = pad(date.getMonth()+1, 2);
+                            var year = date.getFullYear();
+                            content += '<br />'+day+'/'+month+'/'+year
+                        }
+                        layer.bindPopup(content);
+                    }
+                }
+            });
+            
+            control.addOverlay(container.data, type);
+        });
+    }
+    
+    function addMarkerLayer(type, container, color) {
+        // Ajax to add a Marker data layer
+        
+        var geojsonMarkerOptions = {
+            radius: 5,
+            fillColor: color,
+            color: '#000',
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        
+        $.getJSON($('link[rel="'+type+'"]').attr("href"), function(data) {
+            container.data = L.geoJson(data, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                },
+                onEachFeature: function (feature, layer) {
+                    // Add a popup to each object
+                    
+                    if (feature.properties && feature.properties.type) {
+                        var content = feature.properties.type;
+                        if (feature.properties.name) {
+                            content += '<br />'+feature.properties.name
+                        }
+                        layer.bindPopup(content);
+                    }
+                }
+            });
+            
+            control.addOverlay(container.data, type);
+        });
+    }
+    
+    function query(drawn) {
+        // Test each layer and output a result
+        // drawn: selection box
+        
+        // Initialization
+        $('#no_data').hide();
+        $('#date').show();
+        $('#result table').not('#no_data').remove();
+        $('#goto').empty();
+        
+        // Conversion to turf format (to allow tests with within, etc.)
+        var drawn_latlngs = [];
+        var first_iteration = true;
+        var drawn_first_latlng;
+        drawn._latlngs[0].forEach(function(entry) {
+            if (first_iteration) {
+                drawn_first_latlng = [entry.lng, entry.lat];
+                first_iteration = false;
+            }
+            drawn_latlngs.push([entry.lng, entry.lat]);
+        });
+        drawn_latlngs.push(drawn_first_latlng);
+        var turfDrawn = turf.polygon([drawn_latlngs]);
+        
+        var no_data = true;
+        var nb_table = 0;
+        for (var i = 0; i < allLayers.length; i++) {
+            var type = '';
+            allLayers[i].data.eachLayer(function (elem) {
+                type = elem.feature.properties.type;
+            });
+            
+            // If the layer is not visible, skip it
+            var active = true;
+            $('.leaflet-control-layers-selector').each(function() {
+                if ($(this).next().text().trim() == type) {
+                    if ($(this).prop("checked") == false) active = false;
+                }
+            });
+            if (!active) continue;
+            
+            var selected = []; // The selected elements
+            allLayers[i].data.eachLayer(function (elem) {
+                var elem_type = elem.feature.geometry.type;
+                
+                // Conversion to turf format
+                if (elem_type == 'Polygon') {
+                    var elem_latlngs = [];
+                    var first_iteration = true;
+                    var elem_first_latlng;
+                    elem._latlngs[0].forEach(function(entry) {
+                        if (first_iteration) {
+                            elem_first_latlng = [entry.lng, entry.lat];
+                            first_iteration = false;
+                        }
+                        elem_latlngs.push([entry.lng, entry.lat]);
+                    });
+                    elem_latlngs.push(elem_first_latlng);
+                    
+                    var turfElem = turf.polygon([elem_latlngs]);
+                } else if (elem_type == 'Point') {
+                    var turfElem = turf.point([elem._latlng.lng, elem._latlng.lat]);
+                }
+                
+                // Test: is elem in selection?
+                if (turf.booleanWithin(turfElem, turfDrawn) ||
+                        turf.booleanContains(turfElem, turfDrawn) ||
+                        turf.booleanOverlap(turfElem, turfDrawn)) {
+                    selected.push(elem);
+                }
+            });
+            if (!selected.length) continue; // If no elements, skip the layer
+            
+            if (no_data) no_data = false;
+            
+            // Add a table to show the results
+            var special_val = ['lat_tl', 'lon_tr', 'lat_tr', 'lon_br', 'lat_br', 'lon_bl',
+                'lat_bl']; // Not lon_tl, which is used
+            var table = $('<table id="table_'+i+'">');
+            var j = 0;
+            nb_table++;
+            selected.forEach(function(elem) {
+                if (j == 0) { // 1st line, i.e. th
+                    var row = $('<tr>');
+                    table.append(row);
+                    
+                    for (prop in elem.feature.properties) {
+                        if (!special_val.includes(prop)) {
+                            if (prop == 'lon_tl') {
+                                var content = $('<th>').css('min-width', '210px').text('footprint (lon, lat)');
+                            } else {
+                                var content = $('<th>').text(prop);
+                            }
+                            row.append(content);
+                        }
+                    }
+                    
+                    j++;
+                }
+                
+                // Following lines
+                var row = $('<tr>');
+                table.append(row);
+                
+                for (prop in elem.feature.properties) {
+                    if (special_val.includes(prop)) continue; // Skip properties flagged as special
+                    
+                    var val = elem.feature.properties[prop];
+                    
+                    var cell = $('<td>');
+                    if (prop == 'lon_tl') {
+                        lon_tl = parseFloat(val).toFixed(2);
+                        lat_tl = parseFloat(elem.feature.properties.lat_tl).toFixed(2);
+                        lon_br = parseFloat(elem.feature.properties.lon_br).toFixed(2);
+                        lat_br = parseFloat(elem.feature.properties.lat_br).toFixed(2);
+                        lon_bl = parseFloat(elem.feature.properties.lon_bl).toFixed(2);
+                        lat_bl = parseFloat(elem.feature.properties.lat_bl).toFixed(2);
+                        lon_tr = parseFloat(elem.feature.properties.lon_tr).toFixed(2);
+                        lat_tr = parseFloat(elem.feature.properties.lat_tr).toFixed(2);
+                        
+                        cell.append(`(${lon_tl}&deg;, ${lat_tl}&deg;) (${lon_tr}&deg;, ${lat_tr}&deg;)<br>(${lon_bl}&deg;, ${lat_bl}&deg;) (${lon_br}&deg;, ${lat_br}&deg;)`);
+                    } else if (prop == 'url') { // URL
+                        var url = $('<a>').attr({
+                            'href': val
+                        });
+                        $('<img>').attr({
+                            'src': 'images/download_data_off.png',
+                            'alt': 'download',
+                            'onmouseover': "this.src='images/download_data_on.png'",
+                            'onmouseout': "this.src='images/download_data_off.png'",
+                            'height': 50
+                        }).appendTo(url);
+                        cell.append(url);
+                    } else if (prop == 'preview') { // Preview
+                        var url = $('<a>').attr({
+                            'href': elem.feature.properties.preview
+                        });
+                        $('<img>').attr({
+                            'src': val,
+                            'alt': ''
+                        }).appendTo(url);
+                        cell.append(url);
+                    } else if (prop == 'kmz') { // kmz
+                        var url = $('<a>').attr({
+                            'href': val
+                        });
+                        $('<img>').attr({
+                            'src': 'images/download_kmz_off.png',
+                            'alt': 'télécharger',
+                            'onmouseover': "this.src='images/download_kmz_on.png'",
+                            'onmouseout': "this.src='images/download_kmz_off.png'",
+                            'height': 50
+                        }).appendTo(url);
+                        cell.append(url);
+                    } else { // All other properties
+                        cell.append(val);
+                    }
+                    
+                    row.append(cell);
+                }
+            });
+            $('#result').append(table);
+            
+            $('#goto').append('<a id="anchor_table_'+i+'" href="#table_'+i+'">'+type+'</a>'); // Anchors to access tables
+        }
+        
+        if (nb_table < 2) {
+            $('#goto').empty(); // Remove the anchors if useless
+        }
+        
+        if (no_data) {
+            $('#date').hide();
+            $('#no_data').show();
+            $('#no_data td').html(NO_DATA_MESSAGE);
+        } else {
+            // Sorting the tables (https://stackoverflow.com/a/49041392)
+            
+            // Modification of the initial code: for the spatial_resol field, remove the units before sorting
+            const getCellValue = function(tr, idx) {
+                var content = tr.children[idx].textContent;
+                var th_content = tr.closest('table').rows.item(0).children[idx].textContent;
+                if (th_content == 'spatial_resol') content = content.split(' ')[0];
+                return content;
+            }
+            
+            const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+                v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+                )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+            
+            document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+                const table = th.closest('table');
+                Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+                    .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+                    .forEach(tr => table.appendChild(tr) );
+            })));
+            
+            // Get the dates
+            var date_min = $('#from').datepicker('getDate');
+            var date_max = $('#to').datepicker('getDate');
+            filter_table(date_min, date_max);
+        }
+    }
+    
+    function decorateAnchors() {
+        // Add elements to decorate (starting by removing everything)
+        
+        $('#goto :not(a)').remove();
+        if ($('#goto a:visible').length) {
+            $('#goto').prepend('<span>See&nbsp;:</span>');
+            $('#goto a:visible:not(:first)').before('<span> - </span>');
+        }
+    }
+    
+    // Map definition
+    var map = L.map('map', {
+        center: [0, 0],
+        zoom: 2,
+        gestureHandling: true,
+        gestureHandlingOptions: {
+            duration: 2500
+        }
+    });
+    var grid = L.grid().addTo(map);
+    
+    // leaflet.draw
+    var drawnItems = new L.FeatureGroup().addTo(map);
+    
+    var drawControlFull = new L.Control.Draw({
+        draw: {
+            polyline: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
+            polygon: false,
+            rectangle: {
+                shapeOptions: {
+                    color: '#ffff00',
+                    opacity: 0.9,
+                    fillOpacity: 0.4
+                },
+                metric: ['km']
+            }
+        }
+    }).addTo(map);
+    
+    var drawControlEditOnly = new L.Control.Draw({
+        draw: false,
+        edit: {
+            featureGroup: drawnItems
+        }
+    })
+    
+    // When a selection is drawn
+    map.on(L.Draw.Event.CREATED, function(e) {
+        var drawn = e.layer;
+        drawnItems.addLayer(drawn);
+        
+        drawControlFull.remove(map);
+        drawControlEditOnly.addTo(map);
+        
+        query(drawn);
+    });
+    
+    // When the selection box is deleted
+    map.on(L.Draw.Event.DELETED, function() {
+        drawControlEditOnly.remove(map);
+        drawControlFull.addTo(map);
+        
+        $('#result table').not('#no_data').remove();
+        $('#date').hide();
+        $('#no_data').show();
+        $('#no_data td').html(NO_DATA_MESSAGE);
+        $('#goto').empty();
+    });
+    
+    // When the selection box is edited
+    map.on(L.Draw.Event.EDITED, function() {
+        var layers = drawnItems._layers;
+        if (!jQuery.isEmptyObject(layers)) { // If there is a selection
+            firstLayer = layers[Object.keys(layers)[0]]; // A way to select the 1st property of an object without knowing the name of this property
+            query(firstLayer);
+        }
+    });
+    
+    // When a layer is activated/deactivated, update the results if there is a selection
+    map.on('overlayadd', function() {
+        var layers = drawnItems._layers;
+        if (!jQuery.isEmptyObject(layers)) {
+            firstLayer = layers[Object.keys(layers)[0]];
+            query(firstLayer);
+        }
+    });
+    map.on('overlayremove', function() {
+        var layers = drawnItems._layers;
+        if (!jQuery.isEmptyObject(layers)) {
+            firstLayer = layers[Object.keys(layers)[0]];
+            query(firstLayer);
+        }
+    });
+    
+    // Basemap
+//bing_maps    key = 'your_bing_maps_key';
+//bing_maps    var bing_aerial = L.tileLayer.bing({
+//bing_maps        bingMapsKey: key
+//bing_maps    }).addTo(map);
+//bing_maps    var bing_aerialwlabels = L.tileLayer.bing({
+//bing_maps        bingMapsKey: key,
+//bing_maps        imagerySet: 'AerialWithLabels'
+//bing_maps    }).addTo(map);
+//openstreetmap    var openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//openstreetmap        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//openstreetmap    }).addTo(map);
+    
+    // Control
+    var baseMaps = { // The last baseMap will be displayed by default
+//openstreetmap        'OpenStreetMap': openstreetmap,
+//bing_maps        'Bing Aerial': bing_aerial,
+//bing_maps        'Bing Aerial w/ Labels': bing_aerialwlabels
+    };
+    
+    var overlays = {
+        'Grid': grid
+    };
+    
+    var control = L.control.layers(baseMaps, overlays).addTo(map); // No overlay at this point, because the GeoJSON is recovered using Ajax, which executes later. Hence, the overlays need to be added in the Ajax.
+    
+    // Data (GeoJSON format, added after the page is created, using Ajax)
+    // Global variables (can be modified by map.on)
+    // These are objects, so that it is possible to pass them to addPolygonLayer and
+    // addMarkerLayer. To access their content, you must use aw3d30.data, not aw3d30 (for example:
+    // aw3d30.data.eachLayer)
+    
+    // var example_data = {};
+    // var allLayers = [example_data];
+    // addPolygonLayer('EXAMPLE_DATA', example_data, '#ff0000');
+    
+    // --> YOUR_DATA <--
+    
+    
+    // jQuery UI Datepicker
+    
+    function filter_table(date_min, date_max) {
+        // Filter the table according to the defined date range
+        
+        $('#goto').show();
+        
+        var have_dates_min_max = (date_min && date_max) ? true : false; // true if a date range is defined
+        var nb_filtered = 0, total = 0;
+        var one_has_no_date = false; // true if at least 1 table has no date field
+        
+        if (have_dates_min_max) {
+            $('#result table').not('#no_data').each(function() { // For each result table
+                var has_date = false; // true if the table has a date field
+                var date_col_nb = null;
+                var nb_filtered_this_table = 0, total_this_table = 0;
+                var id = $(this).attr('id').split('_')[1];
+                
+                $(this).show(); // If the table has been hidden in the past
+                $('#anchor_table_'+id).show(); // If the anchor has been hidden in the past
+                
+                $(this).find('th').each(function(i) { // Scan the th
+                    if ($(this).text() == 'date') {
+                        has_date = true;
+                        date_col_nb = i+1; // Index of the column that contains the date
+                        return false; // No break in .each() -> use this
+                    }
+                });
+                
+                if (!has_date && !one_has_no_date) one_has_no_date = true;
+                
+                // Check each date and hide lines out of range
+                if (has_date) {
+                    $(this).find('tr').each(function(i) {
+                        if (i > 0) { // Ignore the 1st line, which contains ths, no tds
+                            $(this).show(); // Show the line (if it had been hidden)
+                            // To parse the date, you must do it that way to obtain 0:00
+                            var date_split = $(this).children('td:nth-child('+date_col_nb+')').text().split('-');
+                            var date = new Date(date_split[0], date_split[1]-1, date_split[2]);
+                            if (date.getTime() < date_min.getTime() ||
+                                    date.getTime() > date_max.getTime()) {
+                                $(this).hide(); // Hide the line
+                                nb_filtered++;
+                                nb_filtered_this_table++;
+                            }
+                            total++;
+                            total_this_table++;
+                        }
+                    });
+                }
+                
+                // Hide the table if it's empty after filtering, and hide the anchor pointing to it
+                if (total_this_table != 0 && nb_filtered_this_table == total_this_table) {
+                    $(this).hide();
+                    $('#anchor_table_'+id).hide();
+                }
+            });
+            
+            // Show the number of results filtered
+            var words = (nb_filtered == 1) ? ' result excluded)' : ' results excluded)'
+            $('#date span').html('(' + nb_filtered + words);
+            
+            if (total != 0 && nb_filtered == total && !one_has_no_date) {
+                $('#no_data').show();
+                $('#no_data td').html(NO_DATA_AFTER_FILTER_MESSAGE);
+            } else {
+                $('#no_data').hide();
+            }
+            
+            // If only one anchor is still visible, hide #goto (because useless)
+            if ($('#goto a:visible').length < 2) $('#goto').hide();
+        } else {
+            $('#result table').not('#no_data').each(function() { // For each result table
+                $(this).show(); // Show the table if it has been hidden in the past
+                $(this).find('tr').each(function() {
+                    $(this).show(); // Show the line if it has been hidden in the past
+                });
+                
+                // Show the anchor if it has been hidden in the past
+                var id = $(this).attr('id').split('_')[1];
+                $('#anchor_table_'+id).show();
+            });
+            
+            $('#date span').html(null);
+            $('#no_data').hide();
+        }
+        
+        decorateAnchors();
+    }
+    
+    function resetDates() {
+        // Remet les champs des dates à null et affiche tous les résultats (dont ceux qui étaient masqués)
+        // Set the date values to null and show all the results (including the hidden ones)
+        
+        $('#from').val(null);
+        $('#to').val(null);
+        
+        var date_min = $('#from').datepicker('getDate');
+        var date_max = $('#to').datepicker('getDate');
+        
+        filter_table(date_min, date_max);
+    }
+    
+    // datepickers definition
+    $(function() {
+        $('#from').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd/mm/yy',
+            onSelect: function() {
+                // Get the dates
+                var date_min = $(this).datepicker('getDate');
+                var date_max = $('#to').datepicker('getDate');
+                
+                filter_table(date_min, date_max);
+            }
+        });
+        $('#to').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd/mm/yy',
+            onSelect: function() {
+                // Get the dates
+                var date_min = $('#from').datepicker('getDate');
+                var date_max = $(this).datepicker('getDate');
+                
+                filter_table(date_min, date_max);
+            }
+        });
+    });
+</script>
+
+<div id="date">
+    <label for="from">Dates from </label>
+    <input type="text" id="from" name="from">
+    <label for="to">to</label>
+    <input type="text" id="to" name="to">
+    <button onclick="resetDates()" id="reset_dates">Reset</button>
+    <span></span>
+</div>
+<div id="goto"></div>
+
+<div id="result">
+    <table id="no_data">
+        <tr><td></td></tr>
+    </table>
+</div>
+
+<button onclick="toTop()" id="toTop" title="Go to top">&#129093;</button>
+
+<footer>
+    © 2020 Arthur Delorme; licensed under GPL-3.0
+    <br /><a href="">A simple spatial database</a>
+</footer>
+
+</body>
+</html>

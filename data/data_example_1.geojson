@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "type": "Sentinel-2", "date": "2000-01-01", "lon_tl": "7", "lat_tl": "48", "lon_tr": "8", "lat_tr": "48", "lon_br": "8", "lat_br": "47", "lon_bl": "7", "lat_bl": "47", "nb_row": "3000", "nb_col": "3000", "resol_spat": "10 m", "preview": "images/satellite1.jpg", "url": "test/test.zip", "kmz": "test/test.kmz" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 7.0, 48.0 ], [ 8.0, 48.0 ], [ 8.0, 47.0 ], [ 7.0, 47.0 ], [ 7.0, 48.0 ] ] ] } },
+{ "type": "Feature", "properties": { "type": "Sentinel-2", "date": "2000-01-02", "lon_tl": "-65", "lat_tl": "-42", "lon_tr": "-64", "lat_tr": "-42", "lon_br": "-64", "lat_br": "-43", "lon_bl": "-65", "lat_bl": "-43", "nb_row": "3000", "nb_col": "3000", "resol_spat": "10 m", "preview": "images/satellite1.jpg", "url": "test/test.zip", "kmz": "test/test.kmz" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -65.0, -42.0 ], [ -64.0, -42.0 ], [ -64.0, -43.0 ], [ -65.0, -43.0 ], [ -65.0, -42.0 ] ] ] } },
+{ "type": "Feature", "properties": { "type": "Sentinel-2", "date": "2000-01-03", "lon_tl": "-61", "lat_tl": "-19", "lon_tr": "-60", "lat_tr": "-19", "lon_br": "-60", "lat_br": "-20", "lon_bl": "-61", "lat_bl": "-20", "nb_row": "3000", "nb_col": "3000", "resol_spat": "10 m", "preview": "images/satellite1.jpg", "url": "test/test.zip", "kmz": "test/test.kmz" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -61.0, -19.0 ], [ -60.0, -19.0 ], [ -60.0, -20.0 ], [ -61.0, -20.0 ], [ -61.0, -19.0 ] ] ] } }
+]
+}
