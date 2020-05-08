@@ -6,7 +6,7 @@ It is largely based on [Leaflet](https://leafletjs.com), a great open source Jav
 
 The web interface shows a map, on which you can display each dataset as a layer. When you select data from the map, the results are listed below the map, dynamically.
 
-The idea is to keep it simple: only a basic web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files as a database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
+The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files as a database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
 
 ## External libraries (provided in this repository)
 
