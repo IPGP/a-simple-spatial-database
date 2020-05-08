@@ -110,4 +110,4 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
 
 # Self-destruction of this initialization script, to avoid leaving it on the web
 # server
-remove(argv[0])
+os.remove(sys.argv[0])
