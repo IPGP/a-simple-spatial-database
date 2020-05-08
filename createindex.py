@@ -107,3 +107,7 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
                         ))
         else:
             f_out.write(l)
+
+# Self-destruction of this initialization script, to avoid leaving it on the web
+# server
+remove(argv[0])
