@@ -222,15 +222,18 @@
                     elem_latlngs.push(elem_first_latlng);
                     
                     var turfElem = turf.polygon([elem_latlngs]);
+                    
+                    // Test: is elem in selection?
+                    if (turf.booleanWithin(turfElem, turfDrawn) ||
+                            turf.booleanContains(turfElem, turfDrawn) ||
+                            turf.booleanOverlap(turfElem, turfDrawn)) {
+                        selected.push(elem);
+                    }
                 } else if (elem_type == 'Point') {
                     var turfElem = turf.point([elem._latlng.lng, elem._latlng.lat]);
-                }
-                
-                // Test: is elem in selection?
-                if (turf.booleanWithin(turfElem, turfDrawn) ||
-                        turf.booleanContains(turfElem, turfDrawn) ||
-                        turf.booleanOverlap(turfElem, turfDrawn)) {
-                    selected.push(elem);
+                    
+                    // Test: is elem in selection?
+                    if (turf.booleanWithin(turfElem, turfDrawn)) selected.push(elem);
                 }
             });
             if (!selected.length) continue; // If no elements, skip the layer
