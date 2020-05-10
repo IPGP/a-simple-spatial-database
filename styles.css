@@ -125,3 +125,10 @@ footer a:hover {
 .leaflet-container a.leaflet-popup-close-button {
     padding: 1px 1px 0 0;
 }
+
+/* Remove the Save and Cancel options from "Delete layers" */
+/* This is to avoid the unwanted behavior with "Delete layers" where you could Save without selecting a layer, leading to a situation where you don't have the draw option anymore and no active selection drawn */
+ul.leaflet-draw-actions.leaflet-draw-actions-bottom li a[title="Save changes"],
+ul.leaflet-draw-actions.leaflet-draw-actions-bottom li a[title="Cancel editing, discards all changes"] {
+    display: none;
+}
