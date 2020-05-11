@@ -132,3 +132,7 @@ ul.leaflet-draw-actions.leaflet-draw-actions-bottom li a[title="Save changes"],
 ul.leaflet-draw-actions.leaflet-draw-actions-bottom li a[title="Cancel editing, discards all changes"] {
     display: none;
 }
+
+.ui-datepicker {
+        z-index: 9999 !important;
+}
