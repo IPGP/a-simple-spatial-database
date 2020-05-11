@@ -63,7 +63,7 @@
     <!-- <link rel="EXAMPLE_DATA" type="application/json" href="data/example_data.geojson"> -->
     
     <script>
-    // Goto top
+    // Go to top
     function toTop() {
         $('html, body').animate({scrollTop: 0}, 500);
     }
@@ -286,7 +286,7 @@
                         lat_tr = parseFloat(elem.feature.properties.lat_tr).toFixed(2);
                         
                         cell.append(`(${lon_tl}&deg;, ${lat_tl}&deg;) (${lon_tr}&deg;, ${lat_tr}&deg;)<br>(${lon_bl}&deg;, ${lat_bl}&deg;) (${lon_br}&deg;, ${lat_br}&deg;)`);
-                    } else if (prop == 'url') { // URL
+                    } else if (prop == 'url') { // url
                         var url = $('<a>').attr({
                             'href': val
                         });
@@ -525,7 +525,7 @@
                 $(this).show(); // If the table has been hidden in the past
                 $('#anchor_table_'+id).show(); // If the anchor has been hidden in the past
                 
-                $(this).find('th').each(function(i) { // Scan the th
+                $(this).find('th').each(function(i) { // Scan the <th>s
                     if ($(this).text() == 'date') {
                         has_date = true;
                         date_col_nb = i+1; // Index of the column that contains the date
@@ -538,7 +538,7 @@
                 // Check each date and hide lines out of range
                 if (has_date) {
                     $(this).find('tr').each(function(i) {
-                        if (i > 0) { // Ignore the 1st line, which contains ths, no tds
+                        if (i > 0) { // Ignore the 1st line, which contains <th>s, no <td>s
                             $(this).show(); // Show the line (if it had been hidden)
                             // To parse the date, you must do it that way to obtain 0:00
                             var date_split = $(this).children('td:nth-child('+date_col_nb+')').text().split('-');
@@ -595,7 +595,6 @@
     }
     
     function resetDates() {
-        // Remet les champs des dates à null et affiche tous les résultats (dont ceux qui étaient masqués)
         // Set the date values to null and show all the results (including the hidden ones)
         
         $('#from').val(null);
