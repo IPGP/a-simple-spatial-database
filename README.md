@@ -51,13 +51,15 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
 3) Run the **`createindex.py`** initialization script. This will generate `index.html`, which is the core part of the interface.
 
 ```
-createindex.py [-h] [--bing_maps_key BING_MAPS_KEY] [--title TITLE]
+createindex.py [-h] [--true_run] [--bing_maps_key BING_MAPS_KEY] [--title TITLE]
 ```
 Optional arguments:
 ```
--h, --help                              show this help message and exit
---bing_maps_key BING_MAPS_KEY           your Bing Maps API key (OpenStreetMap will be used by default)
---title TITLE                           title of the web page (the <title> and <h1> HTML elements)
+-h, --help                          show this help message and exit
+--true_run                          add this to really run the script (the script will purposely delete
+                                        itself during the process)
+--bing_maps_key BING_MAPS_KEY       your Bing Maps API key (if not provided, OpenStreetMap will be used)
+--title TITLE                       to customize the web page title
 ```
 
 And this is it!
