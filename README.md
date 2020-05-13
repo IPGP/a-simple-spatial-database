@@ -25,19 +25,21 @@ Leaflet plugins:
 
 You need to provide one [GeoJSON](https://geojson.org) file per dataset. By dataset is meant a set of homogeneous data. For example, one file listing images of one satellite (or multiple satellites, as long as they share the same family of parameters), one file listing GPS stations, etc.
 
-There are some additional constraints and possibilities to take into account regarding the GeoJSON files:
-- For the moment, among the types of geometry proposed in GeoJSON, only two are available: `Polygon` and `Point`.
-- About the `properties` member of each Feature object:
-  - The `properties` member **must** contain a `type` property. Its value must be the same for each Feature object in the file. For example, it could be the name of the satellite or "GPS station".
-  - If the data have a date information, use `date` as the property name. This will allow the use of the date filter of the interface.
-  - If you want to provide a link to download the data, use `url` as the property name. This will make the URL prettier.
-  - If you want to offer KMZ files for download, use `kmz` as the property name. Again, this will make the URL prettier.
-  - If you want to display a preview image, use `preview` as the property name. Also here, it will make it nicer.
+A very handy tool, `ogr2ogr`, is available in GDAL for converting between formats (including GeoJSON).
+
+#### About the GeoJSON files
+- Additional requirements:
+  - For the moment, among the types of geometry proposed in GeoJSON, only two are available: `Polygon` and `Point`.
+  - The `properties` member of each Feature object **must** contain a `type` property. Its value **must** be the same for each object. For example, it could be the name of the satellite or "GPS station".
+
+- Options concerning `properties`:
+  - If the data have a date information, using `date` as the property name will allow the use of the date filter of the interface.
+  - If you provide a link to download the data, using `url` as the property name will make the URL prettier.
+  - If you offer KMZ files for download, using `kmz` as the property name will make the URL prettier too.
+  - If you want to display a preview image, using `preview` as the property name will make it prettier.
   - If you want to display the coordinates of the four corners of an image, use the following property names: `lon_tl` (for top left), `lat_tl`, `lon_tr`, `lat_tr`, `lon_br`, `lat_br`, `lon_bl`, `lat_bl`.
 
-Two files are provided in the `data` directory, as examples.
-
-And finally, note that a very handy tool for converting between formats (including GeoJSON) is `ogr2ogr`, from GDAL.
+(Two files are provided in the `data` directory, as examples.)
 
 ## Installation
 
