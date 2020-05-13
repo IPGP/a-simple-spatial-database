@@ -32,11 +32,11 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
   - For the moment, among the types of geometry proposed in GeoJSON, only two are available: `Polygon` and `Point`.
   - The `properties` member of each Feature object **must** contain a `type` property. Its value **must** be the same for each object. For example, it could be the name of the satellite or "GPS station".
 
-- Options concerning `properties`:
-  - If the data have a date information, using `date` as the property name will allow the use of the date filter of the interface.
-  - If you provide a link to download the data, using `url` as the property name will make the URL prettier.
-  - If you offer KMZ files for download, using `kmz` as the property name will make the URL prettier too.
-  - If you want to display a preview image, using `preview` as the property name will make it prettier.
+- "Special" `properties` (optional):
+  - `date` : if the data have a date information, using `date` as the property name will allow to filter the results by date.
+  - `url` : if you provide a link to download the data, using `url` as the property name will make the URL prettier.
+  - `kmz` : if you offer KMZ files for download, using `kmz` as the property name will make the URL prettier too.
+  - `preview` : if you want to display a preview image, using `preview` as the property name will make the preview prettier.
   - If you want to display the coordinates of the four corners of an image, use the following property names: `lon_tl` (for top left), `lat_tl`, `lon_tr`, `lat_tr`, `lon_br`, `lat_br`, `lon_bl`, `lat_bl`.
   - When you click on an object on the map, a popup displays the `type` property, and also the `date` and/or `name` properties, if they exist in the GeoJSON file.
 
