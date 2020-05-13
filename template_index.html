@@ -99,6 +99,25 @@
         return str.length < max ? pad("0" + str, max) : str;
     }   
     
+    function onEachFeature (feature, layer) {
+        // Add a popup to each object
+        
+        if (feature.properties && feature.properties.type) {
+            var content = feature.properties.type;
+            if (feature.properties.name) {
+                content += '<br />'+feature.properties.name
+            }
+            if (feature.properties.date) {
+                var date = new Date(feature.properties.date);
+                var day = pad(date.getDate(), 2);
+                var month = pad(date.getMonth()+1, 2);
+                var year = date.getFullYear();
+                content += '<br />'+day+'/'+month+'/'+year
+            }
+            layer.bindPopup(content);
+        }
+    }
+    
     function addPolygonLayer(type, container, color) {
         // Ajax to add a Polygon data layer
         
@@ -107,21 +126,7 @@
                 style: {
                     'color': color
                 },
-                onEachFeature: function (feature, layer) {
-                    // Add a popup to each object
-                    
-                    if (feature.properties && feature.properties.type) {
-                        var content = feature.properties.type;
-                        if (feature.properties.date) {
-                            var date = new Date(feature.properties.date);
-                            var day = pad(date.getDate(), 2);
-                            var month = pad(date.getMonth()+1, 2);
-                            var year = date.getFullYear();
-                            content += '<br />'+day+'/'+month+'/'+year
-                        }
-                        layer.bindPopup(content);
-                    }
-                }
+                onEachFeature: onEachFeature
             });
             
             control.addOverlay(container.data, type);
@@ -145,17 +150,7 @@
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, geojsonMarkerOptions);
                 },
-                onEachFeature: function (feature, layer) {
-                    // Add a popup to each object
-                    
-                    if (feature.properties && feature.properties.type) {
-                        var content = feature.properties.type;
-                        if (feature.properties.name) {
-                            content += '<br />'+feature.properties.name
-                        }
-                        layer.bindPopup(content);
-                    }
-                }
+                onEachFeature: onEachFeature
             });
             
             control.addOverlay(container.data, type);
