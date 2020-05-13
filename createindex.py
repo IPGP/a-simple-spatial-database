@@ -34,19 +34,18 @@ parser = argparse.ArgumentParser(
         description='Generate index.html for the Spatial database web interface'
     )
 parser.add_argument('--true_run', action='store_true',
-    help="add this to truly run the script (the script will purposely delete itself during the process)")
+    help="add this to really run the script (the script will purposely delete itself during the process)")
 parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
 parser.add_argument('--title', type=str,
     help="to customize the web page title")
 if len(sys.argv) == 1: # https://stackoverflow.com/a/4042861/13433994
     parser.print_help(sys.stderr)
-    sys.exit(1)
 
 args = parser.parse_args()
 
 if not args.true_run:
-    sys.exit()
+    sys.exit("\nThis is a dry run\n-> Add --true_run to really run the script (the script will purposely delete itself during the process)")
 
 # Scan the data directory
 geojson_files = {}
@@ -75,6 +74,8 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
     for l in f_in:
         if '<title>' in l and args.title:
             f_out.write('    <title>{}</title>\n'.format(args.title))
+        elif '<h1>' in l and args.title:
+            f_out.write('<h1>{}</h1>\n'.format(args.title))
         elif 'leaflet-bing-layer' in l and args.bing_maps_key:
             f_out.write('    {}\n'.format(l.split('--')[1].strip()))
         elif '//bing_maps' in l and args.bing_maps_key:
