@@ -6,7 +6,7 @@ import os
 import sys
 import json
 
-# createindex.py - Generate index.html for the Spatial database web interface
+# createindex.py - Generate index.html for a-simple-spatial-database interface
 # Copyright (C) 2020 Arthur Delorme
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ See the GNU General Public License for more details.''')
 
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Generate index.html for the Spatial database web interface'
+        description='Generate index.html for a-simple-spatial-database interface'
     )
 parser.add_argument('--true_run', action='store_true',
     help="add this to really run the script (the script will purposely delete itself during the process)")
