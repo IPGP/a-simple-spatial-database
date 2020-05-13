@@ -33,12 +33,20 @@ parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Generate index.html for the Spatial database web interface'
     )
+parser.add_argument('--true_run', action='store_true',
+    help="add this to truly run the script (the script will purposely delete itself during the process)")
 parser.add_argument('--bing_maps_key', type=str,
-    help="your Bing Maps API key (OpenStreetMap will be used by default)")
+    help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
 parser.add_argument('--title', type=str,
-    help="title of the web page (the <title> and <h1> HTML elements)")
+    help="to customize the web page title")
+if len(sys.argv) == 1: # https://stackoverflow.com/a/4042861/13433994
+    parser.print_help(sys.stderr)
+    sys.exit(1)
 
 args = parser.parse_args()
+
+if not args.true_run:
+    sys.exit()
 
 # Scan the data directory
 geojson_files = {}
