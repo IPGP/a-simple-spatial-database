@@ -2,7 +2,7 @@
 
 This is an attempt to share the work that I have done, by developing an interface to share spatial data in our team.
 
-It is largely based on [Leaflet](https://leafletjs.com), a great open source JavaScript library! But not only.
+It is largely based on [Leaflet](https://leafletjs.com), a great open source JavaScript library.
 
 The web interface shows a map, on which you can display each dataset as a layer. When you select data from the map, the results are listed below the map, dynamically.
 
