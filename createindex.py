@@ -31,34 +31,49 @@ See the GNU General Public License for more details.''')
 
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Generate index.html for a-simple-spatial-database interface'
+        description=("Generate index.html for a-simple-spatial-database "
+            "interface")
     )
-parser.add_argument('--true_run', action='store_true',
-    help="add this to really run the script (the script will purposely delete itself during the process)")
 parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
 parser.add_argument('--title', type=str,
     help="to customize the web page title")
-if len(sys.argv) == 1: # https://stackoverflow.com/a/4042861/13433994
-    parser.print_help(sys.stderr)
-
+# if len(sys.argv) == 1: # https://stackoverflow.com/a/4042861/13433994
+    # parser.print_help(sys.stderr)
+    # sys.exit(1)
 args = parser.parse_args()
 
-if not args.true_run:
-    sys.exit("\nThis is a dry run\n-> Add --true_run to really run the script (the script will purposely delete itself during the process)")
+# Ask wether the script should delete itself or not
+print(("\nFor safety reasons, this script ({}) "
+        "should be deleted after the run.").format(
+            os.path.basename(sys.argv[0])
+        )
+    )
+while True:
+    can_self_destructs = input(("Do you allow it to delete itself during the "
+        "process? (y/n): "))
+    if can_self_destructs not in ('y', 'n'):
+        print("Please answer by yes or no (y/n).")
+    else:
+        self_destructs = True
+        if can_self_destructs == 'n': 
+            self_destructs = False
+        break
 
 # Scan the data directory
 geojson_files = {}
 for f in os.listdir('data'):
     if f.endswith('.geojson'):
         if ' ' in f:
-            sys.exit('Error with "{}": whitespaces not allowed in the GeoJSON file names'.format(f))
+            sys.exit(('Error with "{}": whitespaces not allowed in '
+                'the GeoJSON file names'.format(f)))
         with open('data/'+f) as geojson_f:
             data = json.load(geojson_f)
             type = data['features'][0]['properties']['type']
             geometry_type = data['features'][0]['geometry']['type']
         if geometry_type not in ['Point', 'Polygon']:
-            sys.exit('Error with "{}": geometry type is not supported (only Point and Polygon are)')
+            sys.exit(('Error with "{}": geometry type is not supported '
+                '(only Point and Polygon are)'))
         geojson_files[f] = {
             'type': type,
             'geometry_type': geometry_type,
@@ -87,9 +102,11 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
             f_out.write(l.replace('//openstreetmap', ''))
         elif '<!-- YOUR_DATA -->' in l: # HTML part
             for f in geojson_files:
-                f_out.write('    <link rel="{}" type="application/json" href="data/{}">\n'.format(
-                        geojson_files[f]['type'],
-                        f
+                f_out.write(('    <link rel="{}" type="application/json" '
+                        'href="data/{}">\n'.format(
+                            geojson_files[f]['type'],
+                            f
+                        )
                     ))
         elif '// --> YOUR_DATA <--' in l: #JS part
             prefix_list = []
@@ -117,6 +134,12 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
         else:
             f_out.write(l)
 
-# Self-destruction of this initialization script, to avoid leaving it on the web
-# server
-os.remove(sys.argv[0])
+# Self-destruction of this initialization Python script, to avoid leaving a
+# Python script on the web server
+if not self_destructs:
+    print(("\nYou have not allowed the script to delete itself.\nConsider "
+        "deleting it manually or moving it to a safe location, outside the web "
+        "server."))
+else:
+    print("\nThe script will now delete itself. Bye-bye!")
+    os.remove(sys.argv[0])
