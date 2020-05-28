@@ -51,17 +51,17 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
 3) Run the **`createindex.py`** initialization script. This will generate `index.html`, which is the core part of the interface.
 
 ```
-createindex.py [-h] [--true_run] [--bing_maps_key BING_MAPS_KEY] [--title TITLE]
+createindex.py [-h] [--bing_maps_key BING_MAPS_KEY] [--title TITLE]
 ```
 Optional arguments:
 ```
 -h, --help                          show this help message and exit
---true_run                          add this to really run the script (the script will purposely delete
-                                        itself during the process)
 --bing_maps_key BING_MAPS_KEY       your Bing Maps API key (if not provided, OpenStreetMap will be used)
 --title TITLE                       to customize the web page title
 ```
 
 And this is it!
 
-For security reasons, the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. In the future, if you need to update the interface, to add a new dataset for example, just keep a copy in a safe directory (i.e. not accessible to the client) or download it again from here.
+For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it (for testing, if you need to run in again, to update the interface or to add a new dataset for example). Therefore, the script will ask you what you prefer.  
+In case you don't authorize the script to delete itself, **consider deleting it manually or moving it to a safe location** (i.e. not accessible to the client).  
+In any case, you can always download it again from here.
