@@ -38,9 +38,6 @@ parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
 parser.add_argument('--title', type=str,
     help="to customize the web page title")
-# if len(sys.argv) == 1: # https://stackoverflow.com/a/4042861/13433994
-    # parser.print_help(sys.stderr)
-    # sys.exit(1)
 args = parser.parse_args()
 
 # Ask wether the script should delete itself or not
