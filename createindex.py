@@ -135,8 +135,8 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
 # Python script on the web server
 if not self_destructs:
     print(("\nYou have not allowed the script to delete itself.\nConsider "
-        "deleting it manually or moving it to a safe location, outside the web "
-        "server."))
+        "deleting it manually or moving it to a safe location (i.e. not "
+        "accessible to the client."))
 else:
     print("\nThe script will now delete itself. Bye-bye!")
     os.remove(sys.argv[0])
