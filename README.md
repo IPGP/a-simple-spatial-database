@@ -60,8 +60,12 @@ Optional arguments:
 --title TITLE                       to customize the web page title
 ```
 
-And this is it!
+**And this is it!**
 
-For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it (for testing, if you need to run in again, to update the interface or to add a new dataset for example). Therefore, the script will ask you what you prefer.  
-In case you don't authorize the script to delete itself, **consider deleting it manually or moving it to a safe location** (i.e. not accessible to the client).  
+## Important
+
+For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it (for testing or if you need to run in again, to update the interface or to add a new dataset for example). Therefore, the script will ask you what you prefer.
+
+In case you don't authorize the script to delete itself, **consider deleting it manually or moving it to a safe location** (i.e. not accessible to the client).
+
 In any case, you can always download it again from here.
