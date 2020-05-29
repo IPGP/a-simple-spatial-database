@@ -62,6 +62,8 @@ Optional arguments:
 
 **And this is it!**
 
+Now access `index.html` through your web server to make use of the interface. In a local environment, the URL should be something like `http://localhost/a-simple-database/index.html`.
+
 ## Important
 
 For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it (for testing or if you need to run in again, to update the interface or to add a new dataset for example). Therefore, the script will ask you what you prefer.
