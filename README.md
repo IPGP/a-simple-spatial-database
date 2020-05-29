@@ -62,7 +62,7 @@ Optional arguments:
 
 **And this is it!**
 
-Now access `index.html` through your web server to make use of the interface. In a local environment, the URL should be something like `http://localhost/a-simple-database/index.html`.
+Now access `index.html` through your web server to make use of the interface. In a local environment, the URL should be something like `http://localhost/a-simple-spatial-database/index.html`.
 
 ## Important
 
