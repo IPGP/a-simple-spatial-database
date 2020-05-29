@@ -1,6 +1,6 @@
 # a-simple-spatial-database
 
-This is an attempt to share the work that I have done, by developing an interface to share spatial data in our team.
+This is an attempt to share the work that I have done, by developing an interface to browse spatial data in our team.
 
 It is largely based on [Leaflet](https://leafletjs.com), a great open source JavaScript library.
 
