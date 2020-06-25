@@ -42,7 +42,7 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
   - If you want to display the coordinates of the four corners of an image, use the following property names: `lon_tl` (for top left), `lat_tl`, `lon_tr`, `lat_tr`, `lon_br`, `lat_br`, `lon_bl`, `lat_bl`.
   - When you click on an object on the map, a popup displays the `type` property, and also the `date` and/or `name` properties, if they exist in the GeoJSON file.
 
-(Two files are provided in the `data` directory, as examples.)
+(Two GeoJSON files are provided in the `data` directory, as examples.)
 
 ## Installation
 
