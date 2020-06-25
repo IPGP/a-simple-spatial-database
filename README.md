@@ -1,12 +1,12 @@
 # a-simple-spatial-database
 
-This is an attempt to share the work that I have done, by developing an interface to browse spatial data in our team.
+This is an attempt to share the work that I have done, by developing a web interface to browse spatial data in our team.
 
 It is largely based on [Leaflet](https://leafletjs.com), a great open source JavaScript library.
 
-The web interface shows a map, on which you can display each dataset as a layer. When you select data from the map, the results are listed below the map, dynamically.
+The web interface shows a map, on which you can display each dataset as a layer. When you select data in the map, the results are listed below it, dynamically.
 
-The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files as a database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
+The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files for the database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
 
 A demo is available > [here](http://www.ipgp.fr/~delorme/a-simple-spatial-database) <
 
