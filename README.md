@@ -8,6 +8,8 @@ The web interface shows a map, on which you can display each dataset as a layer.
 
 The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files as a database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
 
+A demo is available > [here](http://www.ipgp.fr/~delorme/a-simple-spatial-database) <
+
 ## External libraries (provided in this repository)
 
 - [Leaflet](https://leafletjs.com)
