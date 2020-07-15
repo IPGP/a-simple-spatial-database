@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import argparse
+import textwrap
 import os
 import sys
 import json
@@ -23,16 +24,18 @@ import json
 
 # (Contact: delorme@ipgp.fr)
 
-print('''createindex.py Copyright (C) 2020 Arthur Delorme
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute
-it under certain conditions.
-See the GNU General Public License for more details.''')
+print('createindex.py Copyright (C) 2020 Arthur Delorme\n')
 
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=("Generate index.html for a-simple-spatial-database "
-            "interface")
+            "interface"),
+        epilog=textwrap.dedent('''
+                This program comes with ABSOLUTELY NO WARRANTY.
+                This is free software, and you are welcome to redistribute it
+                under certain conditions.
+                See the GNU General Public License for more details.
+            ''')
     )
 parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
