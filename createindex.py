@@ -71,9 +71,9 @@ for f in os.listdir('data'):
             data = json.load(geojson_f)
             type = data['features'][0]['properties']['type']
             geometry_type = data['features'][0]['geometry']['type']
-        if geometry_type not in ['Point', 'Polygon']:
+        if geometry_type not in ['Point', 'Polygon', 'LineString']:
             sys.exit(('Error with "{}": geometry type is not supported '
-                '(only Point and Polygon are)').format(f))
+                '(only Point, Polygon and LineString are)').format(f))
         geojson_files[f] = {
             'type': type,
             'geometry_type': geometry_type,
@@ -121,6 +121,12 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
                 color = color_list[i]
                 if geojson_files[f]['geometry_type'] == 'Point':
                     f_out.write("    addMarkerLayer('{}', {}, '{}');\n".format(
+                            geojson_files[f]['type'],
+                            geojson_files[f]['prefix'],
+                            color
+                        ))
+                elif geojson_files[f]['geometry_type'] == 'LineString':
+                    f_out.write("    addPolylineLayer('{}', {}, '{}');\n".format(
                             geojson_files[f]['type'],
                             geojson_files[f]['prefix'],
                             color

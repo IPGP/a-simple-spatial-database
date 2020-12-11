@@ -133,6 +133,21 @@
         });
     }
     
+    function addPolylineLayer(type, container, color) {
+        // Ajax to add a Polyline data layer
+        
+        $.getJSON($('link[rel="'+type+'"]').attr("href"), function(data) {
+            container.data = L.geoJson(data, {
+                style: {
+                    'color': color
+                },
+                onEachFeature: onEachFeature
+            });
+            
+            control.addOverlay(container.data, type);
+        });
+    }
+    
     function addMarkerLayer(type, container, color) {
         // Ajax to add a Marker data layer
         
@@ -224,11 +239,26 @@
                             turf.booleanOverlap(turfElem, turfDrawn)) {
                         selected.push(elem);
                     }
+                } else if (elem_type == 'LineString') {
+                    var elem_latlngs = [];
+                    elem._latlngs.forEach(function(entry) {
+                        elem_latlngs.push([entry.lng, entry.lat]);
+                    });
+                    
+                    var turfElem = turf.lineString(elem_latlngs);
+                    
+                    // Test: is elem in selection?
+                    if (turf.booleanWithin(turfElem, turfDrawn) ||
+                            turf.booleanCrosses(turfElem, turfDrawn)) {
+                        selected.push(elem);
+                    }
                 } else if (elem_type == 'Point') {
                     var turfElem = turf.point([elem._latlng.lng, elem._latlng.lat]);
                     
                     // Test: is elem in selection?
-                    if (turf.booleanWithin(turfElem, turfDrawn)) selected.push(elem);
+                    if (turf.booleanPointInPolygon(turfElem, turfDrawn)) {
+                        selected.push(elem);
+                    }
                 }
             });
             if (!selected.length) continue; // If no elements, skip the layer
@@ -488,9 +518,9 @@
     
     // Data (GeoJSON format, added after the page is created, using Ajax)
     // Global variables (can be modified by map.on)
-    // These are objects, so that it is possible to pass them to addPolygonLayer and
-    // addMarkerLayer. To access their content, you must use aw3d30.data, not aw3d30 (for example:
-    // aw3d30.data.eachLayer)
+    // These are objects, so that it is possible to pass them to addPolygonLayer,
+    // addPolylineLayer and addMarkerLayer. To access their content, you must use
+    // aw3d30.data, not aw3d30 (for example: aw3d30.data.eachLayer)
     
     // var example_data = {};
     // var allLayers = [example_data];
