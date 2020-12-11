@@ -140,8 +140,8 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
         else:
             f_out.write(l)
 
-# Self-destruction of this initialization Python script, to avoid leaving a
-# Python script on the web server
+# Self-destruct this python script, to avoid leaving an executable on the web
+# server
 if not self_destructs:
     print(("\nYou did not allow the script to delete itself.\nConsider "
         "deleting it manually or moving it to a safe location (i.e. not "
