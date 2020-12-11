@@ -44,7 +44,7 @@ parser.add_argument('--title', type=str,
 args = parser.parse_args()
 
 # Ask wether the script should delete itself or not
-print(("\nFor safety reasons, this script ({}) "
+print(("For safety reasons, this script ({}) "
         "should be deleted after the run.").format(
             os.path.basename(sys.argv[0])
         )
@@ -137,7 +137,7 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
 # Self-destruction of this initialization Python script, to avoid leaving a
 # Python script on the web server
 if not self_destructs:
-    print(("\nYou have not allowed the script to delete itself.\nConsider "
+    print(("\nYou did not allow the script to delete itself.\nConsider "
         "deleting it manually or moving it to a safe location (i.e. not "
         "accessible\nto the client)."))
 else:
