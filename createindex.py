@@ -71,9 +71,11 @@ for f in os.listdir('data'):
             data = json.load(geojson_f)
             type = data['features'][0]['properties']['type']
             geometry_type = data['features'][0]['geometry']['type']
-        if geometry_type not in ['Point', 'Polygon', 'LineString']:
+        if geometry_type not in ['Point', 'Polygon', 'LineString',
+                'MultiLineString']:
             sys.exit(('Error with "{}": geometry type is not supported '
-                '(only Point, Polygon and LineString are)').format(f))
+                '(only Point, LineString, MultiLineString and Polygon '
+                'are)').format(f))
         geojson_files[f] = {
             'type': type,
             'geometry_type': geometry_type,

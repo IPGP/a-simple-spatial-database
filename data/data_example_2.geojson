@@ -1,7 +1,29 @@
 {
-"type": "FeatureCollection",
-"features": [
-{ "type": "Feature", "properties": { "type": "GPS station", "name": "MyNameIsA", "url": "test/test.zip" }, "geometry": { "type": "Point", "coordinates": [ 104.0, 10.0 ] } },
-{ "type": "Feature", "properties": { "type": "GPS station", "name": "MyNameIsB", "url": "test/test.zip" }, "geometry": { "type": "Point", "coordinates": [ -62.0, 70.0 ] } }
-]
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "GPS station",
+                "name": "MyNameIsA",
+                "url": "test/test.zip"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [ 104.0, 10.0 ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "GPS station",
+                "name": "MyNameIsB",
+                "url": "test/test.zip"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [ -62.0, 70.0 ]
+            }
+        }
+    ]
 }
