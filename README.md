@@ -31,7 +31,7 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
 
 #### About the GeoJSON files
 - Additional requirements:
-  - For the moment, among the types of geometry proposed in GeoJSON, only two are available: `Polygon` and `Point`.
+  - For the moment, among the types of geometry proposed in GeoJSON, four are available: `Point`, `LineString`, `MultiLineString` and `Polygon`.
   - The `properties` member of each Feature object **must** contain a `type` property. Its value **must** be the same for each object. For example, it could be the name of the satellite or "GPS station".
 
 - "Special" `properties` (optional):
@@ -42,7 +42,7 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
   - If you want to display the coordinates of the four corners of an image, use the following property names: `lon_tl` (for top left), `lat_tl`, `lon_tr`, `lat_tr`, `lon_br`, `lat_br`, `lon_bl`, `lat_bl`.
   - When you click on an object on the map, a popup displays the `type` property, and also the `date` and/or `name` properties, if they exist in the GeoJSON file.
 
-(Two GeoJSON files are provided in the `data` directory, as examples.)
+(Four GeoJSON files, one for each type of geometry available, are provided in the `data` directory, as examples.)
 
 ## Installation
 
