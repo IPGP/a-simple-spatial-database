@@ -270,9 +270,11 @@
                     
                     // Test: is elem in selection?
                     turf.featureEach(segments, function(segment) {
-                        if (turf.booleanWithin(segment, turfDrawn) ||
-                                turf.booleanCrosses(segment, turfDrawn)) {
-                            if (!selected.includes(elem)) selected.push(elem);
+                        if (!selected.includes(elem)) {
+                            if (turf.booleanWithin(segment, turfDrawn) ||
+                                    turf.booleanCrosses(segment, turfDrawn)) {
+                                selected.push(elem);
+                            }
                         }
                     });
                 } else if (elem_type == 'Point') {
