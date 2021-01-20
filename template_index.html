@@ -17,8 +17,8 @@
     <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.SimpleShape.js"></script>
     <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Rectangle.js"></script>
     <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Marker.js"></script>
-  	<script src="external/Leaflet.draw-develop/src/edit/handler/Edit.CircleMarker.js"></script>
-  	<script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Circle.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="external/Leaflet.draw-develop/src/edit/handler/Edit.Circle.js"></script>
     
     <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Feature.js"></script>
     <script src="external/Leaflet.draw-develop/src/draw/handler/Draw.Polyline.js"></script>
@@ -44,6 +44,8 @@
     <script src="external/Leaflet.draw-develop/src/edit/EditToolbar.js"></script>
     <script src="external/Leaflet.draw-develop/src/edit/handler/EditToolbar.Edit.js"></script>
     <script src="external/Leaflet.draw-develop/src/edit/handler/EditToolbar.Delete.js"></script>
+    
+    <script src="external/Leaflet-hash/leaflet-hash.js"></script>
     
     <script src="external/Leaflet.Grid-master/L.Grid.js"></script>
     <link rel="stylesheet" href="external/Leaflet.Grid-master/L.Grid.css">
@@ -437,6 +439,7 @@
             duration: 2500
         }
     });
+    var hash = new L.Hash(map);
     var grid = L.grid().addTo(map);
     
     // leaflet.draw

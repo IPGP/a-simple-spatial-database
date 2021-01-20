@@ -22,6 +22,7 @@ Leaflet plugins:
 - [leaflet-bing-layer](https://github.com/digidem/leaflet-bing-layer)
 - [Leaflet.Grid](https://github.com/jieter/Leaflet.Grid)
 - [Leaflet.GestureHandling](https://github.com/elmarquis/Leaflet.GestureHandling)
+- [Leaflet-hash](https://github.com/mlevans/leaflet-hash)
 
 ## Database
 
