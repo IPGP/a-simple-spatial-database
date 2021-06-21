@@ -616,8 +616,8 @@
             });
             
             // Show the number of results filtered
-            var words = (nb_filtered == 1) ? ' result excluded)' : ' results excluded)'
-            $('#date span').html('(' + nb_filtered + words);
+            var words = (nb_filtered == 1) ? ' result' : ' results'
+            $('#date span').html('(' + nb_filtered + words + ' excluded, out of ' + total + ')');
             
             if (total != 0 && nb_filtered == total && !one_has_no_date) {
                 $('#no_data').show();
