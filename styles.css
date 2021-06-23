@@ -95,7 +95,7 @@ footer a:hover {
 
 #date {
     display: none;
-    margin: 30px 10px;
+    margin: 20px 10px;
 }
 
 #date span {
@@ -114,6 +114,10 @@ footer a:hover {
 
 #goto a:hover {
     text-decoration: underline;
+}
+
+#nb_images {
+    margin: 20px 10px;
 }
 
 .leaflet-popup-content-wrapper {

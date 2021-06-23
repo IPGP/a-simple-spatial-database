@@ -85,8 +85,12 @@
 <div id="map"></div>
 <script>
     // Constants
-    var NO_DATA_MESSAGE = 'To display results, activate one or more data layers and draw a selection (rectangle icon)';
-    var NO_DATA_AFTER_FILTER_MESSAGE = "No results within the defined date range"
+    var NO_DATA_MESSAGE = 'To view data, activate one or more data layers and draw a selection (rectangle icon)';
+    var NO_DATA_AFTER_FILTER_MESSAGE = "No data in the defined date range"
+    var EMPTY_SELECTION_MESSAGE = 'Selection is empty';
+    
+    // Global variables
+    var nb_images = 0;
     
     // Message initialization
     $(function() {$('#no_data td').html(NO_DATA_MESSAGE);}); 
@@ -183,8 +187,9 @@
         $('#date').show();
         $('#result table').not('#no_data').remove();
         $('#goto').empty();
+        $('#nb_images').empty();
         
-        // Conversion to turf format (to allow tests with within, etc.)
+        // Convert selection box to turf format (to allow tests using within, etc.)
         var drawn_latlngs = [];
         var first_iteration = true;
         var drawn_first_latlng;
@@ -199,7 +204,8 @@
         var turfDrawn = turf.polygon([drawn_latlngs]);
         
         var no_data = true;
-        var nb_table = 0;
+        var nb_tables = 0;
+        nb_images = 0;
         for (var i = 0; i < allLayers.length; i++) {
             var type = '';
             allLayers[i].data.eachLayer(function (elem) {
@@ -297,7 +303,7 @@
                 'lat_bl']; // Not lon_tl, which is used
             var table = $('<table id="table_'+i+'">');
             var j = 0;
-            nb_table++;
+            nb_tables++;
             selected.forEach(function(elem) {
                 if (j == 0) { // 1st line, i.e. th
                     var row = $('<tr>');
@@ -320,6 +326,7 @@
                 // Following lines
                 var row = $('<tr>');
                 table.append(row);
+                nb_images++;
                 
                 for (prop in elem.feature.properties) {
                     if (special_val.includes(prop)) continue; // Skip properties flagged as special
@@ -380,17 +387,20 @@
             });
             $('#result').append(table);
             
+            var words = (nb_images == 1) ? ' object' : ' objects'
+            $('#nb_images').html('Selection: ' + nb_images + words);
+            
             $('#goto').append('<a id="anchor_table_'+i+'" href="#table_'+i+'">'+type+'</a>'); // Anchors to access tables
         }
         
-        if (nb_table < 2) {
+        if (nb_tables < 2) {
             $('#goto').empty(); // Remove the anchors if useless
         }
         
         if (no_data) {
             $('#date').hide();
             $('#no_data').show();
-            $('#no_data td').html(NO_DATA_MESSAGE);
+            $('#no_data td').html(EMPTY_SELECTION_MESSAGE);
         } else {
             // Sorting the tables (https://stackoverflow.com/a/49041392)
             
@@ -491,6 +501,7 @@
         $('#no_data').show();
         $('#no_data td').html(NO_DATA_MESSAGE);
         $('#goto').empty();
+        $('#nb_images').empty();
     });
     
     // When the selection box is edited
@@ -616,8 +627,8 @@
             });
             
             // Show the number of results filtered
-            var words = (nb_filtered == 1) ? ' result' : ' results'
-            $('#date span').html('(' + nb_filtered + words + ' excluded, out of ' + total + ')');
+            var words = (nb_filtered == 1) ? ' object' : ' objects'
+            $('#date span').html('(' + nb_filtered + words + ' excluded, out of ' + nb_images + ')');
             
             if (total != 0 && nb_filtered == total && !one_has_no_date) {
                 $('#no_data').show();
@@ -688,6 +699,7 @@
     });
 </script>
 
+<div id="nb_images"></div>
 <div id="date">
     <label for="from">Dates from </label>
     <input type="text" id="from" name="from">
