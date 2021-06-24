@@ -8,7 +8,7 @@ import sys
 import json
 
 # createindex.py - Generate index.html for a-simple-spatial-database interface
-# Copyright (C) 2020 Arthur Delorme
+# Copyright (C) 2021 Arthur Delorme
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,7 @@ import json
 
 # (Contact: delorme@ipgp.fr)
 
-print('createindex.py Copyright (C) 2020 Arthur Delorme\n')
+print('createindex.py Copyright (C) 2021 Arthur Delorme\n')
 
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -39,8 +39,9 @@ parser = argparse.ArgumentParser(
     )
 parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
-parser.add_argument('--title', type=str,
-    help="to customize the web page title")
+parser.add_argument('--title', type=str, help="to customize the web page title")
+parser.add_argument('--hide_footer', action='store_true',
+    help="hide the footer containing information on credits and license")
 args = parser.parse_args()
 
 # Ask wether the script should delete itself or not
@@ -73,7 +74,7 @@ for f in os.listdir('data'):
             geometry_type = data['features'][0]['geometry']['type']
         if geometry_type not in ['Point', 'Polygon', 'LineString',
                 'MultiLineString']:
-            sys.exit(('Error with "{}": geometry type is not supported '
+            sys.exit(('Error with "{}": geometry type not supported '
                 '(only Point, LineString, MultiLineString and Polygon '
                 'are)').format(f))
         geojson_files[f] = {
@@ -88,8 +89,12 @@ with open('colors.txt') as f:
 
 # Create file
 with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
+    skip_line = False
     for l in f_in:
-        if '<title>' in l and args.title:
+        if skip_line:
+            if '</footer>' in l:
+                skip_line = False
+        elif '<title>' in l and args.title:
             f_out.write('    <title>{}</title>\n'.format(args.title))
         elif '<h1>' in l and args.title:
             f_out.write('<h1>{}</h1>\n'.format(args.title))
@@ -139,6 +144,8 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
                             geojson_files[f]['prefix'],
                             color
                         ))
+        elif '<footer>' in l and args.hide_footer:
+            skip_line = True
         else:
             f_out.write(l)
 
