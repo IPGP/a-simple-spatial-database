@@ -6,7 +6,7 @@ It is largely based on [Leaflet](https://leafletjs.com), a great open source Jav
 
 The web interface shows a map, on which you can display each dataset as a layer. When you select data in the map, the results are listed below it, dynamically.
 
-The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files for the database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are also provided in this repository (in the `external` directory).
+The idea is to keep it simple: only a basic Linux web server is needed. The interface consists in HTML and JavaScript, and GeoJSON files for the database. So no PHP, no SQL, etc. Also, to facilitate installation and avoid compatibility issues, the external libraries used in the code are provided in this repository (in the `external` directory).
 
 A demo is available > [here](http://www.ipgp.fr/~delorme/a-simple-spatial-database) <
 
@@ -20,7 +20,7 @@ A demo is available > [here](http://www.ipgp.fr/~delorme/a-simple-spatial-databa
 Leaflet plugins:
 - [Leaflet.draw](http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html)
 - [leaflet-bing-layer](https://github.com/digidem/leaflet-bing-layer)
-- [Leaflet.Grid](https://github.com/jieter/Leaflet.Grid)
+- [Leaflet.Coordinates](https://github.com/MrMufflon/Leaflet.Coordinates)
 - [Leaflet.GestureHandling](https://github.com/elmarquis/Leaflet.GestureHandling)
 - [Leaflet-hash](https://github.com/mlevans/leaflet-hash)
 
@@ -49,28 +49,29 @@ A very handy tool, `ogr2ogr`, is available in GDAL for converting between format
 
 1) Download the files and move them to a dedicated directory, in the `DocumentRoot` of your web server (typically, you will create this directory in `/var/www/html/`).
 
-2) Place the GeoJSON files in the **`data`** directory (two files are provided as examples).
+2) Place the GeoJSON files in the **`data`** directory (four files are provided as examples).
 
 3) Run the **`createindex.py`** initialization script. This will generate `index.html`, which is the core part of the interface.
 
 ```
-createindex.py [-h] [--bing_maps_key BING_MAPS_KEY] [--title TITLE] [--hide_footer]
+createindex.py [-h] [--bing_maps_key BING_MAPS_KEY] [--no_openstreetmap] [--title TITLE] [--hide_footer]
 ```
 Optional arguments:
 ```
 -h, --help                          show this help message and exit
 --bing_maps_key BING_MAPS_KEY       your Bing Maps API key (if not provided, OpenStreetMap will be used)
+--no_openstreetmap                  disable OpenStreetMap
 --title TITLE                       to customize the web page title
 --hide_footer                       hide the footer containing information on credits and license
 ```
 
 **And this is it!**
 
-Now access `index.html` through your web server to make use of the interface. In a local environment, the URL should be something like `http://localhost/a-simple-spatial-database/index.html`.
+Access `index.html` through your web server to make use of the interface. In a local environment, the URL should look like: `http://localhost/a-simple-spatial-database/index.html`
 
 ## Important
 
-For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it, for testing or if you need to run it again, to update the interface or to add a new dataset for example. Therefore, the script will ask for your preference.
+For **safety reasons**, normally the `createindex.py` script self-destructs at the end of its execution. This is to avoid potential security breaches on the web server. However, you may find it convenient to keep it, for testing or if you need to run it again, to update the interface or to add a new dataset, for example. Therefore, the script will ask for your preference.
 
 In case you don't authorize the script to delete itself, **consider deleting it manually or moving it to a safe location** (i.e. not accessible to the client).
 

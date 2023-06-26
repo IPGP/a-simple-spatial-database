@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 import argparse
@@ -7,8 +7,8 @@ import os
 import sys
 import json
 
-# createindex.py - Generate index.html for a-simple-spatial-database interface
-# Copyright (C) 2021 Arthur Delorme
+# createindex.py - Generates index.html for a-simple-spatial-database interface
+# Copyright (C) 2023 Arthur Delorme
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -24,11 +24,11 @@ import json
 
 # (Contact: delorme@ipgp.fr)
 
-print('createindex.py Copyright (C) 2021 Arthur Delorme\n')
+print('createindex.py Copyright (C) 2023 Arthur Delorme\n')
 
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description=("Generate index.html for a-simple-spatial-database "
+        description=("Generates index.html for a-simple-spatial-database "
             "interface"),
         epilog=textwrap.dedent('''
                 This program comes with ABSOLUTELY NO WARRANTY.
@@ -39,6 +39,8 @@ parser = argparse.ArgumentParser(
     )
 parser.add_argument('--bing_maps_key', type=str,
     help="your Bing Maps API key (if not provided, OpenStreetMap will be used)")
+parser.add_argument('--no_openstreetmap', action='store_true',
+    help="disable OpenStreetMap")
 parser.add_argument('--title', type=str, help="to customize the web page title")
 parser.add_argument('--hide_footer', action='store_true',
     help="hide the footer containing information on credits and license")
@@ -105,7 +107,7 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
                 f_out.write("    key = '{}';\n".format(args.bing_maps_key))
             else:
                 f_out.write(l.replace('//bing_maps', ''))
-        elif '//openstreetmap' in l and not args.bing_maps_key:
+        elif '//openstreetmap' in l and not args.no_openstreetmap:
             f_out.write(l.replace('//openstreetmap', ''))
         elif '<!-- YOUR_DATA -->' in l: # HTML part
             for f in geojson_files:
@@ -133,11 +135,12 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
                             color
                         ))
                 elif geojson_files[f]['geometry_type'] == 'LineString':
-                    f_out.write("    addPolylineLayer('{}', {}, '{}');\n".format(
-                            geojson_files[f]['type'],
-                            geojson_files[f]['prefix'],
-                            color
-                        ))
+                    f_out.write("    addPolylineLayer('{}', {}, '{}');"
+                        '\n'.format(
+                                geojson_files[f]['type'],
+                                geojson_files[f]['prefix'],
+                                color
+                            ))
                 else:
                     f_out.write("    addPolygonLayer('{}', {}, '{}');\n".format(
                             geojson_files[f]['type'],
@@ -148,6 +151,11 @@ with open('template_index.html') as f_in, open('index.html', 'w') as f_out:
             skip_line = True
         else:
             f_out.write(l)
+
+# Installation complete
+print("\nInstallation complete!\nAccess index.html through your web server to "
+    "make use of the interface. In a local environment, the URL should look "
+    "like: http://localhost/a-simple-spatial-database")
 
 # Self-destruct this python script, to avoid leaving an executable on the web
 # server

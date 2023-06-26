@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>A simple spatial database</title>
     
-    <link rel="stylesheet" href="external/leaflet-1.4.0/leaflet.css">
-    <script src="external/leaflet-1.4.0/leaflet.js"></script>
+    <link rel="stylesheet" href="external/leaflet-1.9.4/leaflet.css">
+    <script src="external/leaflet-1.9.4/leaflet.js"></script>
     
     <!-- <script src="external/leaflet-bing-layer/leaflet-bing-layer.min.js"></script> -->
     
@@ -47,17 +47,18 @@
     
     <script src="external/Leaflet-hash/leaflet-hash.js"></script>
     
-    <script src="external/Leaflet.Grid-master/L.Grid.js"></script>
-    <link rel="stylesheet" href="external/Leaflet.Grid-master/L.Grid.css">
+    <link rel="stylesheet" href="external/leaflet-gesture-handling_1.2.2/leaflet-gesture-handling.min.css">
+    <script src="external/leaflet-gesture-handling_1.2.2/leaflet-gesture-handling.min.js"></script>
     
-    <link rel="stylesheet" href="external/leaflet-gesture-handling/leaflet-gesture-handling.min.css">
-    <script src="external/leaflet-gesture-handling/leaflet-gesture-handling.min.js"></script>
+    <script src="external/Leaflet.Coordinates_0.1.5/Leaflet.Coordinates-0.1.5.src.js"></script>
+    <link rel="stylesheet" href="external/Leaflet.Coordinates_0.1.5/Leaflet.Coordinates-0.1.5.css">
+    <!--[if lte IE 8]><link rel="stylesheet" href="external/Leaflet.Coordinates_0.1.5/Leaflet.Coordinates-0.1.5.ie.css"><![endif]-->
     
-    <script src="external/turf/turf.min.js"></script>
+    <script src="external/turf_6.5.0/turf.min.js"></script>
     
-    <link rel="stylesheet" href="external/jquery-ui-1.12.1/jquery-ui.min.css">
-    <script src="external/jQuery_3.3.1/jquery-3.3.1.min.js"></script>
-    <script src="external/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="external/jquery-ui-1.13.2/jquery-ui.min.css">
+    <script src="external/jQuery_3.7.0/jquery-3.7.0.min.js"></script>
+    <script src="external/jquery-ui-1.13.2/jquery-ui.min.js"></script>
     
     <link rel="stylesheet" href="styles.css">
     
@@ -87,7 +88,7 @@
     // Constants
     var NO_DATA_MESSAGE = 'To view data, activate one or more data layers and draw a selection (rectangle icon)';
     var NO_DATA_AFTER_FILTER_MESSAGE = "No data in the defined date range"
-    var EMPTY_SELECTION_MESSAGE = 'Selection is empty';
+    var EMPTY_SELECTION_MESSAGE = 'The selection is empty';
     
     // Global variables
     var nb_images = 0;
@@ -103,7 +104,7 @@
         
         str = str.toString();
         return str.length < max ? pad("0" + str, max) : str;
-    }   
+    }
     
     function onEachFeature (feature, layer) {
         // Add a popup to each object
@@ -450,7 +451,6 @@
         }
     });
     var hash = new L.Hash(map);
-    var grid = L.grid().addTo(map);
     
     // leaflet.draw
     var drawnItems = new L.FeatureGroup().addTo(map);
@@ -549,9 +549,7 @@
 //bing_maps        'Bing Aerial w/ Labels': bing_aerialwlabels
     };
     
-    var overlays = {
-        'Grid': grid
-    };
+    var overlays = {};
     
     var control = L.control.layers(baseMaps, overlays).addTo(map); // No overlay at this point, because the GeoJSON is recovered using Ajax, which executes later. Hence, the overlays need to be added in the Ajax.
     
@@ -567,6 +565,17 @@
     
     // --> YOUR_DATA <--
     
+    
+    // Mouse coordinates
+    L.control.coordinates({
+        position: "bottomleft",
+        decimals: 2,
+        decimalSeperator: ".",
+        labelTemplateLat: "Lat {y}",
+        labelTemplateLng: "&nbsp;&nbsp;Lon {x}",
+        useLatLngOrder: true,
+        enableUserInput: false
+    }).addTo(map);
     
     // jQuery UI Datepicker
     
@@ -719,7 +728,7 @@
 <button onclick="toTop()" id="toTop" title="Go to top"><img src="images/totop.png" alt="top arrow"></button>
 
 <footer>
-    <a href="https://github.com/IPGP/a-simple-spatial-database">A simple spatial database</a> © 2021 Arthur Delorme; licensed under GPL-3.0
+    <a href="https://github.com/IPGP/a-simple-spatial-database">A simple spatial database</a> &copy; 2023 Arthur Delorme; licensed under GPL-3.0
 </footer>
 
 </body>
